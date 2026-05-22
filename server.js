@@ -10,8 +10,11 @@ import { sendAdminEmailAlerts, sendSMSNotifications } from "./services/notificat
 dotenv.config()
 const app = express()
 
+app.use(cors({
+    origin: ['http://localhost:5173', 'https://ths-egaz.onrender.com']
+}))
 app.use(express.json())
-app.use(cors())
+
 const PORT = process.env.PORT || 5000
 
 app.post("/api/orders", async (req, res) => {
