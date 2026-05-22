@@ -18,10 +18,25 @@ app.use(express.json())
 
 const PORT = process.env.PORT || 5000
 
+// Helper function to format phone numbers for Twilio
+const formatNigerianNumber = (number) => {
+    let cleanNumber = number.replace(/\s+/g, '');
+    if (cleanNumber.startsWith('0')) {
+      return '+234' + cleanNumber.substring(1);
+    }
+    if (cleanNumber.startsWith('8') || cleanNumber.startsWith('7') || cleanNumber.startsWith('9')) {
+      return '+234' + cleanNumber;
+    }
+    if (cleanNumber.startsWith('234')) {
+      return '+' + cleanNumber;
+    }
+    return cleanNumber;
+  };
+
 app.post("/api/orders", async (req, res) => {
     try {
-        console.log("incomig data:", req.body)
         const { itemName, quantity, totalPrice, buyerName, phoneNumber, deliveryAddress } = req.body
+        const formattedPhoneNumber = formatNigerianNumber(phoneNumber)
 
         if (!itemName || !quantity || !totalPrice || !buyerName || !phoneNumber || !deliveryAddress) {
             throw new Error("All fields are required")
@@ -39,6 +54,7 @@ app.post("/api/orders", async (req, res) => {
         const savedOrder = await newOrder.save()
 
         sendAdminEmailAlerts(savedOrder)
+        savedOrder.phoneNumber = formatNigerianNumber(savedOrder.phoneNumber)
         sendSMSNotifications(savedOrder)
 
         return res.status(201).json({ success: true, order: savedOrder })
