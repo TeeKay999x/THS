@@ -53,9 +53,23 @@ app.post("/api/orders", async (req, res) => {
 
         const savedOrder = await newOrder.save()
 
-        await sendAdminEmailAlerts(savedOrder)
-        savedOrder.phoneNumber = formatNigerianNumber(savedOrder.phoneNumber)
-        await sendSMSNotifications(savedOrder)
+        try {
+            await sendAdminEmailAlerts(savedOrder)
+            console.log("Admin email alert processed.")
+        } catch (emailError) {
+            console.error("Email failed to send, moving directly to SMS:", emailError.message)
+        }
+        if (savedOrder.phoneNumber) {
+            savedOrder.phoneNumber = formatNigerianNumber(savedOrder.phoneNumber)
+        }
+
+        try {
+            await sendSMSNotifications(savedOrder)
+            console.log("Admin SMS alert processed")
+        } catch (smsError) {
+            console.error("SMS system error:", smsError.message)
+        }
+
 
         return res.status(201).json({ success: true, order: savedOrder })
     } catch (error) {
