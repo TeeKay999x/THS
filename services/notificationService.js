@@ -10,12 +10,15 @@ const twilioClient = twilio(
 )
 
 const transporter = nodemailer.createTransport({
-    host: '74.125.200.108',
-    port: 465,
+    host: 'smtp.gmail.com',
+    port: 587,
     secure: true,
     auth: {
         user: process.env.NODEMAILER_USER,
         pass: process.env.NODEMAILER_PASS
+    },
+    tls:{
+        rejectUnauthorized: false
     },
     connectionTimeout: 10000,
 })
