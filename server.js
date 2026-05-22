@@ -8,10 +8,11 @@ import { sendAdminEmailAlerts, sendSMSNotifications } from "./services/notificat
 
 
 dotenv.config()
+
 const app = express()
 
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://ths-egaz.onrender.com']
+    origin: ['http://localhost:5173', 'https://ths-gsl.vercel.app']
 }))
 app.use(express.json())
 
