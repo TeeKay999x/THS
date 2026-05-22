@@ -3,7 +3,7 @@ import { connectDB } from "./db.js"
 import dotenv from "dotenv"
 import cors from 'cors'
 import { Order } from "./order.model.js"
-import {Product} from "./product.model.js"
+import { Product } from "./product.model.js"
 import { sendAdminEmailAlerts, sendSMSNotifications } from "./services/notificationService.js"
 
 
@@ -22,16 +22,16 @@ const PORT = process.env.PORT || 5000
 const formatNigerianNumber = (number) => {
     let cleanNumber = number.replace(/\s+/g, '');
     if (cleanNumber.startsWith('0')) {
-      return '+234' + cleanNumber.substring(1);
+        return '+234' + cleanNumber.substring(1);
     }
     if (cleanNumber.startsWith('8') || cleanNumber.startsWith('7') || cleanNumber.startsWith('9')) {
-      return '+234' + cleanNumber;
+        return '+234' + cleanNumber;
     }
     if (cleanNumber.startsWith('234')) {
-      return '+' + cleanNumber;
+        return '+' + cleanNumber;
     }
     return cleanNumber;
-  };
+};
 
 app.post("/api/orders", async (req, res) => {
     try {
@@ -53,9 +53,9 @@ app.post("/api/orders", async (req, res) => {
 
         const savedOrder = await newOrder.save()
 
-        sendAdminEmailAlerts(savedOrder)
+        await sendAdminEmailAlerts(savedOrder)
         savedOrder.phoneNumber = formatNigerianNumber(savedOrder.phoneNumber)
-        sendSMSNotifications(savedOrder)
+        await sendSMSNotifications(savedOrder)
 
         return res.status(201).json({ success: true, order: savedOrder })
     } catch (error) {
@@ -66,12 +66,12 @@ app.post("/api/orders", async (req, res) => {
 
 app.get('/api/products', async (req, res) => {
     try {
-      const products = await Product.find({ isAvailable: true }).sort({ createdAt: -1 });
-      res.status(200).json(products);
+        const products = await Product.find({ isAvailable: true }).sort({ createdAt: -1 });
+        res.status(200).json(products);
     } catch (error) {
-      res.status(500).json({ message: 'Error fetching products', error: error.message });
+        res.status(500).json({ message: 'Error fetching products', error: error.message });
     }
-  });
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
