@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const ProductSchema = new mongoose.Schema({
     name: { type: String, required: true, trim: true },
-    category: { type: String, required: true, enum: ['vegetables', 'gas'] },
+    category: { type: String, required: true, enum: ['vegetables', 'gas', 'spices', 'tubers', 'grains'] },
     image: { type: String, required: true }, // URL string for the product image
     options: [
         {
