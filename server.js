@@ -78,6 +78,56 @@ app.post("/api/orders", async (req, res) => {
     }
 })
 
+app.post("/api/products", async (req, res) => {
+    try {
+      // 1. Extract the secret key from the request headers
+      const adminKey = req.headers['x-admin-key'];
+  
+      // 2. Validate the key against your production environment variable
+      if (!adminKey || adminKey !== process.env.ADMIN_SECRET_KEY) {
+        return res.status(403).json({ 
+          success: false, 
+          message: "Unauthorized: Access denied. Invalid secret key." 
+        });
+      }
+  
+      // 3. Extract product info from the request body
+      console.log("Authorized access. Adding product to DB:", req.body);
+      const { itemName, quantity, totalPrice, isAvailable } = req.body;
+  
+      // Basic validation
+      if (!itemName || totalPrice === undefined) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Item name and price are required fields." 
+        });
+      }
+  
+      // 4. Create and save the new product instance
+      const newProduct = new Product({
+        itemName,
+        quantity: quantity || 0,
+        totalPrice,
+        isAvailable: isAvailable !== undefined ? isAvailable : true
+      });
+  
+      const savedProduct = await newProduct.save();
+      
+      return res.status(201).json({ 
+        success: true, 
+        product: savedProduct 
+      });
+  
+    } catch (error) {
+      console.error("Product upload failure:", error.message);
+      return res.status(500).json({ 
+        success: false, 
+        message: "Server Error: Could not save product.", 
+        error: error.message 
+      });
+    }
+  });
+
 app.get('/api/products', async (req, res) => {
     try {
         const products = await Product.find({ isAvailable: true }).sort({ createdAt: -1 });
