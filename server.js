@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 5000
 
 
 app.use("/api/order", orderRoutes)
-app.use("/api/product", productRoutes)
+app.use("/api/products", productRoutes)
 app.use("/api/admin", adminRoutes)
 
 
