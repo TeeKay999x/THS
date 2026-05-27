@@ -3,8 +3,8 @@ import { loginAdmin, logout, newAdmin } from '../controllers/admin.controllers.j
 
 const router = express.Router()
 
-router.post('/', newAdmin)
-router.get('/', loginAdmin)
+router.post('/signup', newAdmin)
+router.get('/login', loginAdmin)
 router.get('/logout', logout)
 
 
