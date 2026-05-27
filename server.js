@@ -14,7 +14,9 @@ const app = express()
 
 app.use(cookieParser())
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://ths-gsl.vercel.app']
+    origin: ['http://localhost:5173', 'https://ths-gsl.vercel.app'],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
 }))
 app.use(express.json())
 
