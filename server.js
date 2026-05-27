@@ -3,9 +3,6 @@ import { connectDB } from "./db.js"
 import dotenv from "dotenv"
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
-import { Order } from "./order.model.js"
-import { Product } from "./product.model.js"
-import { sendAdminEmailAlerts, sendSMSNotifications } from "./services/notificationService.js"
 
 import orderRoutes from './routes/order.routes.js'
 import productRoutes from './routes/product.route.js'
