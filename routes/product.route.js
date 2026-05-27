@@ -1,5 +1,6 @@
-import { protectRoute } from "../middlewarews/auth.middleware"
-import express from express
+import { protectRoute } from "../middlewarews/auth.middleware.js"
+import { deleteProduct, getProduct, getProducts, newProduct, updateProduct } from "../controllers/product.controllers.js"
+import express from 'express'
 
 const router = express.Router()
 

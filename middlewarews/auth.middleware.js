@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Admin } from "../models/admin.model.js";
 
-export const protectRoute = await (req, res, next) => {
+export const protectRoute = async (req, res, next) => {
     try {
         const token = req.cookies.jwt;
 

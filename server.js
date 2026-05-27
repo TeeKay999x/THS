@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser'
 
 import orderRoutes from './routes/order.routes.js'
 import productRoutes from './routes/product.route.js'
+import adminRoutes from './routes/admin.routes.js'
 
 dotenv.config()
 

@@ -37,7 +37,7 @@ export const newAdmin = async (req, res) => {
 
 
     } catch (error) {
-        res.status(500).json{ message: "Error signing up" }
+        res.status(500).json({message: "Error signing up"})
     }
 }
 
