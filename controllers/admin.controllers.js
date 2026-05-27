@@ -10,7 +10,7 @@ export const newAdmin = async (req, res) => {
             throw Error('All fields are required')
         }
 
-        const adminAlreadyExists = await Admin.findOne(email)
+        const adminAlreadyExists = await Admin.findOne({ email })
 
         if (adminAlreadyExists) {
             return res.status(400).json({ message: "Admin already exists" })
@@ -37,7 +37,7 @@ export const newAdmin = async (req, res) => {
 
 
     } catch (error) {
-        res.status(500).json({message: "Error signing up"})
+        res.status(500).json({ message: "Error signing up" })
     }
 }
 
@@ -49,9 +49,15 @@ export const loginAdmin = async (req, res) => {
             res.status(400).json({ message: "All fields are required" })
         }
 
-        const admin = await Admin.findOne(email).select("-password")
+        const admin = await Admin.findOne({ email })
 
         if (!admin) {
+            res.status(400).json({ message: "Invalid credentials" })
+        }
+
+        const passwordMatch = await bcryptjs.compare(password, admin.password)
+
+        if (!passwordMatch) {
             res.status(400).json({ message: "Invalid credentials" })
         }
 
@@ -67,7 +73,7 @@ export const logout = async (req, res) => {
     res.clearCookie('token', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: strict
+        sameSite: 'strict'
     })
 
     res.status(200).json({ success: true, message: "Logged out successfully" })
