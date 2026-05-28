@@ -39,8 +39,8 @@ export const newAdmin = async (req, res) => {
         })
 
     } catch (error) {
-        console.error("Signup error:", error.message)
-        return res.status(500).json({ message: "Error signing up" })
+        console.error("Signup error:", error)
+        return res.status(500).json({ message: error })
     }
 }
 
